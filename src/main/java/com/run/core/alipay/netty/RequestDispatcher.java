@@ -1,5 +1,7 @@
 package com.run.core.alipay.netty;
 
+import com.run.core.alipay.utils.ByteDataBuffer;
+import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelFutureListener;
 import io.netty.channel.ChannelHandlerContext;
@@ -27,7 +29,10 @@ public class RequestDispatcher implements ApplicationContextAware {
         executorService.submit(() -> {
             ChannelFuture f = null;
             try {
-                log.info("服务器接收到数据：{}", msg.toString());
+                ByteBuf byteBuf = (ByteBuf) msg;
+                ByteDataBuffer bdf = new ByteDataBuffer();
+
+                log.info("服务器接收到数据：{}", bdf.readInt8());
                 f = ctx.writeAndFlush(msg);
                 f.addListener(ChannelFutureListener.CLOSE);
             } catch (Exception e) {
