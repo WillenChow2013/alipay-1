@@ -1,30 +1,93 @@
 package com.run.core.alipay.netty;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import sun.nio.ch.Net;
+import com.fasterxml.jackson.core.ObjectCodec;
+import io.netty.bootstrap.ServerBootstrap;
+import io.netty.channel.*;
+import io.netty.channel.nio.NioEventLoopGroup;
+import io.netty.channel.socket.SocketChannel;
+import io.netty.channel.socket.nio.NioServerSocketChannel;
+import io.netty.handler.codec.LengthFieldBasedFrameDecoder;
+import io.netty.handler.codec.LengthFieldPrepender;
+import io.netty.handler.logging.LogLevel;
+import io.netty.handler.logging.LoggingHandler;
+import io.netty.handler.timeout.IdleStateHandler;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 
-import javax.servlet.ServletContextEvent;
-import javax.servlet.ServletContextListener;
-import javax.servlet.annotation.WebListener;
+import javax.annotation.Resource;
+import java.util.concurrent.TimeUnit;
 
-@WebListener
-public class NettyServerListener implements ServletContextListener {
+@Slf4j
+@Component
+public class NettyServerListener {
 
-    @Autowired
-    private NettyServer nettyServer;
+    @Value("${netty.port}")
+    private int port;
 
-    @Override
-    public void contextInitialized(ServletContextEvent sce) {
-        Thread thread = new Thread(new NettyServerThread());
+    @Value("${netty.max-frame-len}")
+    private int mxFrameLen;
 
-        thread.start();
+    /**
+     * 创建bootstrap
+     */
+    ServerBootstrap serverBootstrap = new ServerBootstrap();
+    /**
+     * BOSS
+     */
+    EventLoopGroup boss = new NioEventLoopGroup();
+    /**
+     * Worker
+     */
+    EventLoopGroup work = new NioEventLoopGroup();
+    /**
+     * 通道适配器
+     */
+
+    @Resource
+    private NettyServerHandler nettyServerHandler;
+
+    public void close() {
+        log.info("准备关闭netty服务器...");
+        boss.shutdownGracefully();
+        work.shutdownGracefully();
     }
 
-    private class NettyServerThread implements Runnable {
 
-        @Override
-        public void run() {
-            nettyServer.run();
+    public void start() {
+        serverBootstrap.group(boss, work)
+                .channel(NioServerSocketChannel.class)
+                .option(ChannelOption.SO_BACKLOG, 100)
+                .handler(new LoggingHandler(LogLevel.INFO));
+
+        try {
+            //设置事件处理
+            serverBootstrap.childHandler(new ChannelInitializer<SocketChannel>() {
+                @Override
+                protected void initChannel(SocketChannel ch) throws Exception {
+                    ChannelPipeline pipeline = ch.pipeline();
+
+                    // 添加心跳支持
+                    pipeline.addLast(new IdleStateHandler(60, 0, 0, TimeUnit.SECONDS));
+//                   pipeline.addLast(new LengthFieldBasedFrameDecoder(mxFrameLen
+//                           , 0, 2, 0, 2));
+//                   pipeline.addLast(new LengthFieldPrepender(2));
+//                pipeline.addLast(new ObjectCodec());
+
+                    pipeline.addLast(nettyServerHandler);
+                }
+            });
+
+
+            ChannelFuture f = serverBootstrap.bind(port).sync();
+            log.info("netty服务已经启动,端口：{}", port);
+            f.channel().closeFuture().sync();
+        } catch (Exception e) {
+            log.info("netty服务启动出现异常异常，释放资源");
+            boss.shutdownGracefully();
+            work.shutdownGracefully();
         }
     }
+
+
 }

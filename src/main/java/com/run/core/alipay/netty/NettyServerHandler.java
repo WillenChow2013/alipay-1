@@ -1,25 +1,65 @@
 package com.run.core.alipay.netty;
 
-import io.netty.buffer.ByteBuf;
+import io.netty.channel.ChannelHandlerAdapter;
 import io.netty.channel.ChannelHandlerContext;
-import io.netty.channel.SimpleChannelInboundHandler;
+import io.netty.handler.timeout.IdleState;
+import io.netty.handler.timeout.IdleStateEvent;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Component;
 
-import static io.netty.util.CharsetUtil.UTF_8;
+import javax.annotation.Resource;
+
 
 @Slf4j
-public class NettyServerHandler extends SimpleChannelInboundHandler<Object> {
+@Component
+public class NettyServerHandler extends ChannelHandlerAdapter {
 
+    @Resource
+    private RequestDispatcher requestDispatcher;
+
+    private int lossConnectCount = 0;
+
+    /**
+     * 异常捕获
+     *
+     * @param ctx
+     * @param cause
+     * @throws Exception
+     */
+    @Override
+    public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
+        cause.printStackTrace();
+        ctx.close();
+    }
+
+    /**
+     * 接收消息
+     *
+     * @param ctx
+     * @param msg
+     * @throws Exception
+     */
+    @Override
+    public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
+        requestDispatcher.dispatcher(ctx, msg);
+    }
 
     @Override
-    protected void messageReceived(ChannelHandlerContext channelHandlerContext, Object msg) throws Exception {
+    public void userEventTriggered(ChannelHandlerContext ctx, Object evt) throws Exception {
+        log.info("{} -> 60秒没有接收到消息,准备释放资源...", this.getClass().getName());
 
-        log.info(msg.toString());
-
-        ByteBuf in = (ByteBuf) msg;
-        log.info("server received: {}", in.toString(UTF_8));
-
-        channelHandlerContext.writeAndFlush("你好哟");
+        if (evt instanceof IdleStateEvent) {
+            IdleStateEvent idleStateEvent = (IdleStateEvent) evt;
+            if (idleStateEvent.state() == IdleState.READER_IDLE) {
+                lossConnectCount++;
+                if (lossConnectCount > 2) {
+                    log.info("{} -> [释放不活跃通道] {}", this.getClass().getName(), ctx.channel().id());
+                    ctx.channel().close();
+                }
+            }
+        } else {
+            super.userEventTriggered(ctx, evt);
+        }
 
     }
 }
