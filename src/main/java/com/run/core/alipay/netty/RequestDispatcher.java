@@ -12,6 +12,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.stereotype.Component;
 
+import java.io.InputStream;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -29,8 +30,11 @@ public class RequestDispatcher implements ApplicationContextAware {
         executorService.submit(() -> {
             ChannelFuture f = null;
             try {
-                ByteBuf byteBuf = (ByteBuf) msg;
-                ByteDataBuffer bdf = new ByteDataBuffer();
+                InputStream is = (InputStream) msg;
+                int blockLen = 20000; // 不能使用is.available()，会造成堵塞。
+                byte[] block = new byte[blockLen];
+                is.read(block);
+                ByteDataBuffer bdf = new ByteDataBuffer(block);
 
                 log.info("服务器接收到数据：{}", bdf.readInt8());
                 f = ctx.writeAndFlush(msg);
