@@ -1,5 +1,6 @@
 package com.run.core.alipay.netty;
 
+import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerAdapter;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.timeout.IdleState;
@@ -12,6 +13,7 @@ import javax.annotation.Resource;
 
 @Slf4j
 @Component
+@ChannelHandler.Sharable
 public class NettyServerHandler extends ChannelHandlerAdapter {
 
     @Resource
