@@ -8,6 +8,7 @@ import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
 import io.netty.handler.codec.LengthFieldBasedFrameDecoder;
 import io.netty.handler.codec.LengthFieldPrepender;
+import io.netty.handler.codec.string.StringDecoder;
 import io.netty.handler.logging.LogLevel;
 import io.netty.handler.logging.LoggingHandler;
 import io.netty.handler.ssl.SslHandler;
@@ -18,6 +19,7 @@ import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
 import javax.net.ssl.SSLEngine;
+import java.nio.charset.Charset;
 import java.util.concurrent.TimeUnit;
 
 @Slf4j
@@ -71,17 +73,15 @@ public class NettyServerListener {
 
                     // 添加心跳支持
                     pipeline.addLast(new IdleStateHandler(60, 0, 0, TimeUnit.SECONDS));
-                    pipeline.addLast(new LengthFieldBasedFrameDecoder(mxFrameLen
-                            , 0, 2, 0, 2));
-                    pipeline.addLast(new LengthFieldPrepender(2));
-                    pipeline.addLast(new NettyDecoder());
+
+
 
                     SSLEngine sslEngine = ContextSSLFactory.getSslContext().createSSLEngine();
 
                     sslEngine.setUseClientMode(false);
                     sslEngine.setNeedClientAuth(true);
                     pipeline.addLast("ssl", new SslHandler(sslEngine));
-
+                    pipeline.addLast(new StringDecoder(Charset.forName("UTF-8")));
                     pipeline.addLast(nettyServerHandler);
                 }
             });

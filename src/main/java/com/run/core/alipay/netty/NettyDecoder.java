@@ -6,9 +6,11 @@ import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.MessageToMessageCodec;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.List;
 
+@Slf4j
 public class NettyDecoder extends MessageToMessageCodec<ByteBuf, Object> {
 
 
@@ -32,7 +34,8 @@ public class NettyDecoder extends MessageToMessageCodec<ByteBuf, Object> {
     @Override
     protected void decode(ChannelHandlerContext channelHandlerContext, ByteBuf msg, List<Object> list) throws Exception {
         byte[] bytes = new byte[msg.readableBytes()];
-
+        ByteDataBuffer bdf = new ByteDataBuffer(bytes);
+        log.info(bdf.readString(6));
         list.add(bytes);
     }
 }
