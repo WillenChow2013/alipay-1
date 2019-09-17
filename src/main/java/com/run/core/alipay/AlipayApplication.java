@@ -8,7 +8,6 @@ import org.springframework.boot.web.servlet.ServletComponentScan;
 
 import javax.annotation.Resource;
 
-@ServletComponentScan
 @SpringBootApplication(scanBasePackages = "com.run.core.alipay.*")
 public class AlipayApplication implements CommandLineRunner {
     @Resource

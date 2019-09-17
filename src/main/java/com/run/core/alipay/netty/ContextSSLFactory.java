@@ -106,7 +106,7 @@ public class ContextSSLFactory {
 
         KeyManager[] kms = null;
         try {
-            Resource serverPrivateKeyResource = new ClassPathResource("kserver.keystore");
+            Resource serverPrivateKeyResource = new ClassPathResource("tserver.keystore");
             File fileServerPrivateKey = serverPrivateKeyResource.getFile();
             // 获得KeyManagerFactory对象. 初始化位默认算法
             keyFac = KeyManagerFactory.getInstance("SunX509");

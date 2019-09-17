@@ -10,12 +10,14 @@ import io.netty.handler.codec.LengthFieldBasedFrameDecoder;
 import io.netty.handler.codec.LengthFieldPrepender;
 import io.netty.handler.logging.LogLevel;
 import io.netty.handler.logging.LoggingHandler;
+import io.netty.handler.ssl.SslHandler;
 import io.netty.handler.timeout.IdleStateHandler;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
+import javax.net.ssl.SSLEngine;
 import java.util.concurrent.TimeUnit;
 
 @Slf4j
@@ -73,6 +75,12 @@ public class NettyServerListener {
 //                           , 0, 2, 0, 2));
 //                   pipeline.addLast(new LengthFieldPrepender(2));
 //                pipeline.addLast(new ObjectCodec());
+
+                    SSLEngine sslEngine = ContextSSLFactory.getSslContext().createSSLEngine();
+
+                    sslEngine.setUseClientMode(false);
+                    sslEngine.setNeedClientAuth(true);
+                    pipeline.addLast("ssl",new SslHandler(sslEngine));
 
                     pipeline.addLast(nettyServerHandler);
                 }
