@@ -71,16 +71,16 @@ public class NettyServerListener {
 
                     // 添加心跳支持
                     pipeline.addLast(new IdleStateHandler(60, 0, 0, TimeUnit.SECONDS));
-//                   pipeline.addLast(new LengthFieldBasedFrameDecoder(mxFrameLen
-//                           , 0, 2, 0, 2));
-//                   pipeline.addLast(new LengthFieldPrepender(2));
-//                pipeline.addLast(new ObjectCodec());
+                    pipeline.addLast(new LengthFieldBasedFrameDecoder(mxFrameLen
+                            , 0, 2, 0, 2));
+                    pipeline.addLast(new LengthFieldPrepender(2));
+                    pipeline.addLast(new NettyDecoder());
 
                     SSLEngine sslEngine = ContextSSLFactory.getSslContext().createSSLEngine();
 
                     sslEngine.setUseClientMode(false);
                     sslEngine.setNeedClientAuth(true);
-                    pipeline.addLast("ssl",new SslHandler(sslEngine));
+                    pipeline.addLast("ssl", new SslHandler(sslEngine));
 
                     pipeline.addLast(nettyServerHandler);
                 }
