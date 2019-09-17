@@ -15,8 +15,6 @@ import java.util.Random;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import net.sourceforge.pinyin4j.PinyinHelper;
-
 public class Tools {
 	
 	private static  SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");
@@ -238,24 +236,6 @@ public class Tools {
 
 
 		return daysStrList;
-	}
-	
-	public static String getPinYinHeadChar(String str) {
-		
-		String convert = "";
-		String regex = "^[a-z0-9A-Z\u4e00-\u9fa5]+$";
-		for(int j = 0; j < str.length(); j++) {
-			char word = str.charAt(j);
-			String[] pinyinArray = PinyinHelper.toHanyuPinyinStringArray(word);
-			
-			if (pinyinArray != null) {
-				if((pinyinArray[0].charAt(0) + "").matches(regex))
-					convert += (pinyinArray[0].charAt(0) + "").toUpperCase();
-            }else
-            	convert += word;
-		}
-		return convert;
-		
 	}
 	
 }
