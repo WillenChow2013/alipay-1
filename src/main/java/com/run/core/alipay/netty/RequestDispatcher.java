@@ -76,6 +76,10 @@ public class RequestDispatcher implements ApplicationContextAware {
                 bdb.writeBytes(messageFrame.getBytes()); // 报文frame
                 bdb.writeInt8((byte) 0x16); // 结束字节
 
+                log.info("---------------------------------------------------------------------");
+                log.info("发送报文:{}", messageFrame);
+                log.info("---------------------------------------------------------------------");
+
                 f = ctx.writeAndFlush(bdb.getBytes());
                 f.addListener(ChannelFutureListener.CLOSE);
             } catch (Exception e) {

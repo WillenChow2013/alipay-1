@@ -13,6 +13,7 @@ import com.run.core.alipay.utils.Tools;
 import lombok.extern.slf4j.Slf4j;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
+import org.apache.commons.lang.StringUtils;
 import org.n3r.idworker.Sid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -97,24 +98,26 @@ public class AliPayService {
             // 请求参数进行RSA对称加密
             queryResult = HttpTools.post(accOrg.getQueryUrl(), RSAUtils.privateEncrypt(postJson.toString()));
 
-            JSONObject queryResultJson = JSONObject.fromObject(queryResult);
+            JSONObject queryResultJson = JSONObject.fromObject(RSAUtils.privateDecrypt(queryResult));
 
             if (queryResultJson == null)
                 throw new Exception("查询失败");
             try {
                 String status = queryResultJson.getString("status");
 
+
                 if (!"200".equals(status))
                     throw new Exception("查询失败");
                 JSONObject rtnData = queryResultJson.getJSONObject("data");
 
-                if (rtnData == null)
+                if (rtnData == null || StringUtils.isBlank(rtnData.getString("consNo")) || !consNo.equals(rtnData.getString("consNo")))
                     throw new Exception("查询的用户不存在");
                 try {
                     consName = rtnData.getString("consName");
                     addr = rtnData.getString("addr");
                     BigDecimal amt100 = new BigDecimal("100");
                     JSONObject detail = new JSONObject();
+                    prepayAmt = new BigDecimal(rtnData.getString("prepayAmt")).multiply(amt100).setScale(0, BigDecimal.ROUND_HALF_UP).intValue() + "";
                     detail.put("rcvblAmtId", "1");// 不确定 应收标识
                     detail.put("consNo", consNo);// 用户户号
                     detail.put("consName", consName);// 户名
@@ -128,23 +131,32 @@ public class AliPayService {
                     detail.put("rcvedAmt", "0");// 实收金费
                     totalPenalty = new BigDecimal(rtnData.getString("rcvblPenalty")).multiply(amt100).setScale(0, BigDecimal.ROUND_HALF_UP).intValue() + "";
                     detail.put("rcvblPenalty", totalPenalty);//应收违约金（滞纳金）
-                    detail.put("prepayAmt",new BigDecimal(rtnData.getString("prepayAmt")).multiply(amt100).setScale(0, BigDecimal.ROUND_HALF_UP).intValue());
+
 
                     totalOweAmt = new BigDecimal(rtnData.getString("oweAmt")).multiply(amt100).intValue() + "";
                     detail.put("oweAmt", totalOweAmt);// 欠费小计
                     details.add(detail);
 
                 } catch (Exception e2) {
-                    throw new Exception("查询失败");
+                    throw new Exception(e2.getMessage());
                 }
 
 
             } catch (Exception e1) {
-                throw new Exception("查询失败");
+
+                throw new Exception(e1.getMessage());
             }
 
         } catch (Exception e) {
-            e.printStackTrace();
+            if("查询的用户不存在".equals(e.getMessage())){
+                rtnCode = "1002";
+                rtnMsg = "查询号码不合法";
+            }else{
+                rtnCode = "1005";
+                rtnMsg = "暂时无法缴费";
+            }
+
+            log.info("查询接口报错：[{}]",e.getMessage());
         }
 
         body.put("rtnCode", rtnCode);
@@ -218,7 +230,7 @@ public class AliPayService {
                 try {
                     String queryResult = HttpTools.post(accOrg.getQueryUrl(), RSAUtils.privateEncrypt(queryJson.toString()));
 
-                    JSONObject queryResultJson = JSONObject.fromObject(queryResult);
+                    JSONObject queryResultJson = JSONObject.fromObject(RSAUtils.privateDecrypt(queryResult));
 
                     if (queryResultJson == null || !"200".equals(queryResultJson.getString("status")) || queryResultJson.getJSONObject("data") == null) {
                         rtnCode = "2005";
@@ -259,7 +271,7 @@ public class AliPayService {
 
                             try {
                                 String payResult = HttpTools.post(accOrg.getPayUrl(), RSAUtils.privateEncrypt(payJson.toString()));
-                                JSONObject payResultJson = JSONObject.fromObject(payResult);
+                                JSONObject payResultJson = JSONObject.fromObject(RSAUtils.privateDecrypt(payResult));
 
                                 if (payResultJson == null || !"200".equals(payResultJson.getString("status")))
                                     throw new Exception("缴费失败");

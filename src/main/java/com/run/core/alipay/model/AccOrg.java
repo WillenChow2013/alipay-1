@@ -56,8 +56,6 @@ public class AccOrg implements Serializable {
     @ApiModelProperty(value = "FTP密码")
     private String ftpPassword;
 
-    @ApiModelProperty(value = "入驻时间")
-    private LocalDate createTime;
 
 
 }

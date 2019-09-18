@@ -31,7 +31,7 @@ spring:
 pay-file:
   save-path: D:\alipay\upload
 logging:
-  path: /Volumes/code/log
+  path: D:\RunAlipayPlus\log
   level:
     org.springframework.web: DEBUG
     com.run.core.alipay: DEBUG
