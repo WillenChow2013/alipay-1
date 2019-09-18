@@ -13,6 +13,7 @@ import com.run.core.alipay.utils.Tools;
 import lombok.extern.slf4j.Slf4j;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
+import org.n3r.idworker.Sid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -41,6 +42,9 @@ public class AliPayService {
 
     @Value("${pay-file.save-path}")
     private String savePath;
+
+    @Autowired
+    private Sid sid;
 
     /**
      * <p>
@@ -124,6 +128,7 @@ public class AliPayService {
                     detail.put("rcvedAmt", "0");// 实收金费
                     totalPenalty = new BigDecimal(rtnData.getString("rcvblPenalty")).multiply(amt100).setScale(0, BigDecimal.ROUND_HALF_UP).intValue() + "";
                     detail.put("rcvblPenalty", totalPenalty);//应收违约金（滞纳金）
+                    detail.put("prepayAmt",new BigDecimal(rtnData.getString("prepayAmt")).multiply(amt100).setScale(0, BigDecimal.ROUND_HALF_UP).intValue());
 
                     totalOweAmt = new BigDecimal(rtnData.getString("oweAmt")).multiply(amt100).intValue() + "";
                     detail.put("oweAmt", totalOweAmt);// 欠费小计
@@ -242,6 +247,7 @@ public class AliPayService {
                             alipayOrder.setRcvblYm(resultData.getString("rcvblYm"));
                             alipayOrder.setTPq(new BigDecimal(resultData.getString("tPq")).setScale(2, BigDecimal.ROUND_HALF_UP));
                             alipayOrder.setBankSerial(body.getString("bankSerial"));
+                            alipayOrder.setInstSerial(sid.nextShort());
 
                             payJson.put("consNo", key);//客户编码
                             payJson.put("amount", amount);//缴费金额

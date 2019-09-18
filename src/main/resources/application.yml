@@ -30,3 +30,8 @@ spring:
       use-global-data-source-stat: true
 pay-file:
   save-path: D:\alipay\upload
+logging:
+  path: /Volumes/code/log
+  level:
+    org.springframework.web: DEBUG
+    com.run.core.alipay: DEBUG

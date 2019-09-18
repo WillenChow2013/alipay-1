@@ -11,7 +11,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 import javax.annotation.Resource;
 
 @EnableTransactionManagement
-@SpringBootApplication(scanBasePackages = "com.run.core.alipay.*")
+@SpringBootApplication(scanBasePackages = "com.run.core.alipay.*,org.n3r.*")
 @MapperScan("com.run.core.alipay.mapper")
 public class AlipayApplication implements CommandLineRunner {
     @Resource
