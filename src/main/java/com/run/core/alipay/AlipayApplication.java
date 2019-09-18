@@ -6,9 +6,11 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.web.servlet.ServletComponentScan;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import javax.annotation.Resource;
 
+@EnableTransactionManagement
 @SpringBootApplication(scanBasePackages = "com.run.core.alipay.*")
 @MapperScan("com.run.core.alipay.mapper")
 public class AlipayApplication implements CommandLineRunner {

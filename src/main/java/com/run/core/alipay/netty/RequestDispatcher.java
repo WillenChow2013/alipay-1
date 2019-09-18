@@ -41,7 +41,7 @@ public class RequestDispatcher implements ApplicationContextAware {
 
                 bdf.setInBigEndian(false);
                 int begin = bdf.readInt8();
-                if(begin != 104) {
+                if (begin != 104) {
                     log.info("---------------------------------------------------------------------");
                     log.info("返回报文的开始字节格式有误");
                     log.info("---------------------------------------------------------------------");
@@ -57,13 +57,13 @@ public class RequestDispatcher implements ApplicationContextAware {
                 log.info("接收到的报文:" + retData);
                 log.info("---------------------------------------------------------------------");
 
-                if(Integer.valueOf(serverCode) == Cmd.CMD_ZFB_SEARCH)
+                if (Integer.valueOf(serverCode) == Cmd.CMD_ZFB_SEARCH)
                     messageFrame = aliPayService.service200001(retData);
-                if(Integer.valueOf(serverCode) == Cmd.CMD_ZFB_PAY)
+                if (Integer.valueOf(serverCode) == Cmd.CMD_ZFB_PAY)
                     messageFrame = aliPayService.service200002(retData);
-                if(Integer.valueOf(serverCode) == Cmd.CMD_ZFB_ACCOUNT)
+                if (Integer.valueOf(serverCode) == Cmd.CMD_ZFB_ACCOUNT)
                     messageFrame = aliPayService.service200012(retData);
-                if(Integer.valueOf(serverCode) == Cmd.CMD_ZFB_STATEMENT)
+                if (Integer.valueOf(serverCode) == Cmd.CMD_ZFB_STATEMENT)
                     messageFrame = aliPayService.service200011(retData);
 
                 ByteDataBuffer bdb = new ByteDataBuffer();
