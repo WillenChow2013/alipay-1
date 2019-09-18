@@ -38,6 +38,10 @@ public class RequestDispatcher implements ApplicationContextAware {
             try {
                 log.info("服务器接收到报文：{}", msg.toString());
                 ByteDataBuffer bdf = new ByteDataBuffer(msg.toString().getBytes("UTF-8"));
+                String msgStr = new String(bdf.getBytes(),"UTF-8");
+                log.info("---------------------------------------------------------------------");
+                log.info("数据长度：【{}】,数据：【{}】",msgStr.length(),msgStr);
+                log.info("---------------------------------------------------------------------");
 
                 bdf.setInBigEndian(false);
                 int begin = bdf.readInt8();
