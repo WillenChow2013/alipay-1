@@ -30,11 +30,11 @@ public class RequestDispatcher implements ApplicationContextAware {
         executorService.submit(() -> {
             ChannelFuture f = null;
             try {
-               ByteDataBuffer bdf = new ByteDataBuffer(msg.toString().getBytes("UTF-8"));
+                ByteDataBuffer bdf = new ByteDataBuffer(msg.toString().getBytes("UTF-8"));
                 byte[] lenBytes = new byte[4];
                 bdf.readBytes(lenBytes);
                 String serverCode = bdf.readString(6);
-               // String retData = bdf.readString(CommonUtil.readInt32(lenBytes));
+                // String retData = bdf.readString(CommonUtil.readInt32(lenBytes));
                 log.info("服务器接收到数据：{}", msg.toString());
                 f = ctx.writeAndFlush(msg);
                 f.addListener(ChannelFutureListener.CLOSE);
