@@ -133,8 +133,9 @@ public class AliPayService {
                     detail.put("rcvblPenalty", totalPenalty);//应收违约金（滞纳金）
 
 
-                    totalOweAmt = new BigDecimal(rtnData.getString("oweAmt")).multiply(amt100).intValue() + "";
+                    totalOweAmt = new BigDecimal(rtnData.getString("oweAmt")).multiply(amt100).subtract(new BigDecimal(prepayAmt)).setScale(0,BigDecimal.ROUND_HALF_UP).toString();
                     detail.put("oweAmt", totalOweAmt);// 欠费小计
+                    recordCount = "1";
                     details.add(detail);
 
                 } catch (Exception e2) {
