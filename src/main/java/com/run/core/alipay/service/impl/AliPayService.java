@@ -241,7 +241,7 @@ public class AliPayService {
 
                         JSONObject resultData = queryResultJson.getJSONObject("data");
 
-                        double preAmt = new BigDecimal(amount).subtract(new BigDecimal(resultData.getString("rcvblAmt"))).setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
+                        double preAmt = new BigDecimal(amount).subtract(new BigDecimal(resultData.getString("rcvedAmt"))).setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
 
                         if (preAmt < 0) {
                             rtnCode = "2002";
@@ -253,8 +253,8 @@ public class AliPayService {
                             alipayOrder.setOrgId(accOrg.getId());
                             alipayOrder.setConsNo(key);
                             alipayOrder.setConsName(resultData.getString("consName"));
-                            alipayOrder.setBankDate(body.getString("bankDateTime"));
-                            alipayOrder.setBankDateTime(body.getString("bankDateTime"));
+                            alipayOrder.setBankDate(body.getString("bankDate"));
+                            alipayOrder.setBankDateTime(Tools.toDateTimeString(Tools.getCurrentTime()));
                             alipayOrder.setRcvblAmt(new BigDecimal(resultData.getString("rcvblAmt")).setScale(2, BigDecimal.ROUND_HALF_UP));
                             alipayOrder.setRcvedAmt(new BigDecimal(amount).setScale(2, BigDecimal.ROUND_HALF_UP));
                             alipayOrder.setRcvblPenalty(new BigDecimal(resultData.getString("rcvblPenalty")).setScale(2, BigDecimal.ROUND_HALF_UP));
