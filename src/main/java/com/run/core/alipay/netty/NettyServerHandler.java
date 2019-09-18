@@ -48,13 +48,13 @@ public class NettyServerHandler extends ChannelHandlerAdapter {
 
     @Override
     public void userEventTriggered(ChannelHandlerContext ctx, Object evt) throws Exception {
-        log.info("{} -> 60秒没有接收到消息,准备释放资源...", this.getClass().getName());
+        log.info("{} -> 5秒没有接收到消息", this.getClass().getName());
 
         if (evt instanceof IdleStateEvent) {
             IdleStateEvent idleStateEvent = (IdleStateEvent) evt;
             if (idleStateEvent.state() == IdleState.READER_IDLE) {
                 lossConnectCount++;
-                if (lossConnectCount > 2) {
+                if (lossConnectCount > 4) {
                     log.info("{} -> [释放不活跃通道] {}", this.getClass().getName(), ctx.channel().id());
                     ctx.channel().close();
                 }

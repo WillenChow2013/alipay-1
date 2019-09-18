@@ -71,7 +71,7 @@ public class NettyServerListener {
                     ChannelPipeline pipeline = ch.pipeline();
 
                     // 添加心跳支持
-                    pipeline.addLast(new IdleStateHandler(60, 0, 0, TimeUnit.SECONDS));
+                    pipeline.addLast(new IdleStateHandler(10, 0, 0, TimeUnit.SECONDS));
 
                     //添加SSL双向证书
                     SSLEngine sslEngine = ContextSSLFactory.getSslContext().createSSLEngine();
@@ -79,9 +79,6 @@ public class NettyServerListener {
                     sslEngine.setUseClientMode(false);
                     sslEngine.setNeedClientAuth(true);
                     pipeline.addLast("ssl", new SslHandler(sslEngine));
-
-                    //数据发送编码器
-                    pipeline.addLast(new ByteArrayEncoder());
                     //数据接收解码器
                     pipeline.addLast(new StringDecoder(Charset.forName("UTF-8")));
 
