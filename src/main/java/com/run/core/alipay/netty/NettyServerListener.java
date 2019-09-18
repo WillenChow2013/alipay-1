@@ -79,6 +79,9 @@ public class NettyServerListener {
                     sslEngine.setUseClientMode(false);
                     sslEngine.setNeedClientAuth(true);
                     pipeline.addLast("ssl", new SslHandler(sslEngine));
+
+                    //数据发送编码器
+                    pipeline.addLast(new ByteArrayEncoder());
                     //数据接收解码器
                     pipeline.addLast(new StringDecoder(Charset.forName("UTF-8")));
 
