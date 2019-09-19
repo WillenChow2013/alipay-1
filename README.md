@@ -14,3 +14,22 @@ SSL采用双向证书认证同时认证服务端的合法性和客户端的合�
 
 
 用SSL通信技术后，收到数据后和发送数据前的都不需要进行特殊的处理，与普通的socket通信技术没有差别。差别部分是在建立socket连接或者监听socket连接的过程。要使用SSL双向认证通信技术，必须客户端和服务端都需要有证书。
+
+## 用到的关键框架
+* SpringBoot V2.1.8.RELEASE
+* MybatisPlus V3.2.0
+* netty v5.0.0.Alpha2
+
+
+SpringBoot 作为整个框架的粘合剂，特别地，我们把netty交给了SpringBoot容器管理。
+## 关于netty整合的一些想法
+当然，基于技术的熟练度，在这里我们对netty的应用应该是比较粗糙。但是考虑netty的优势，我还是选择netty作为socket通讯框架，他能为我们干很多的事情，这比我们手写socket框架要稳定得多。
+
+总得来说，经过一些时间的摸索，netty模块还是比较简单整合起来了，共整合了四个关键的类
+
+* NettyServerListener:netty服务启动监听
+* NettyServerHandler：通道适配器，主要用于多线程共享
+* RequestDispatcher：请求分排器
+* ContextSSLFactory：加载SSL证书
+
+在这里，我需要特别提到的是：*在请求分排器里，利用ExecutorService*

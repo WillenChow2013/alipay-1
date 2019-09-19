@@ -348,7 +348,7 @@ public class AliPayService {
 
     /**
      * <p>
-     *     公用事业平台发起文本推送时调用此接口
+     *     公用事业平台发起文本推送时调用此接口 200011
      * </p>
      * @param msgFrame
      * @return
@@ -382,7 +382,7 @@ public class AliPayService {
             try {
                 SFTPTool sftpTool = new SFTPTool();
                 ChannelSftp sftp = sftpTool.getConnect(accOrg.getFtpUserName(), accOrg.getFtpIp(), accOrg.getFtpPort(), accOrg.getFtpPassword());
-                sftpTool.download(filePath, filename, savePath, sftp);
+                sftpTool.download(filePath, filename, savePath + "\\" + accOrg.getOrgNo() + "\\", sftp);
                 sftp.disconnect();
                 sftp.getSession().disconnect();
                 sftp.exit();
