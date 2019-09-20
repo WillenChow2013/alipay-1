@@ -1,0 +1,27 @@
+2019-09-20 08:34:38.926  INFO 54639 --- [Thread-11] o.s.s.concurrent.ThreadPoolTaskExecutor  : Shutting down ExecutorService 'applicationTaskExecutor'
+2019-09-20 08:34:39.048  INFO 54639 --- [Thread-11] com.alibaba.druid.pool.DruidDataSource   : {dataSource-0} closing ...
+2019-09-20 08:34:49.899  INFO 57459 --- [main] com.run.core.alipay.AlipayApplication    : Starting AlipayApplication on liuzhaoyideMacBook-Air.local with PID 57459 (/Volumes/code/Java/dorun-alipay/target/classes started by aleex007 in /Volumes/code/Java/dorun-alipay)
+2019-09-20 08:34:49.904 DEBUG 57459 --- [main] com.run.core.alipay.AlipayApplication    : Running with Spring Boot v2.1.8.RELEASE, Spring v5.1.9.RELEASE
+2019-09-20 08:34:49.905  INFO 57459 --- [main] com.run.core.alipay.AlipayApplication    : No active profile set, falling back to default profiles: default
+2019-09-20 08:34:51.813  INFO 57459 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port(s): 9088 (http)
+2019-09-20 08:34:51.849  INFO 57459 --- [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2019-09-20 08:34:51.849  INFO 57459 --- [main] org.apache.catalina.core.StandardEngine  : Starting Servlet engine: [Apache Tomcat/9.0.24]
+2019-09-20 08:34:51.991  INFO 57459 --- [main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2019-09-20 08:34:51.992 DEBUG 57459 --- [main] o.s.web.context.ContextLoader            : Published root WebApplicationContext as ServletContext attribute with name [org.springframework.web.context.WebApplicationContext.ROOT]
+2019-09-20 08:34:51.992  INFO 57459 --- [main] o.s.web.context.ContextLoader            : Root WebApplicationContext: initialization completed in 2009 ms
+2019-09-20 08:34:52.953 DEBUG 57459 --- [main] o.s.w.s.handler.SimpleUrlHandlerMapping  : Patterns [/**/favicon.ico] in 'faviconHandlerMapping'
+2019-09-20 08:34:53.106  INFO 57459 --- [main] o.s.s.concurrent.ThreadPoolTaskExecutor  : Initializing ExecutorService 'applicationTaskExecutor'
+2019-09-20 08:34:53.124 DEBUG 57459 --- [main] s.w.s.m.m.a.RequestMappingHandlerAdapter : ControllerAdvice beans: 0 @ModelAttribute, 0 @InitBinder, 1 RequestBodyAdvice, 1 ResponseBodyAdvice
+2019-09-20 08:34:53.190 DEBUG 57459 --- [main] s.w.s.m.m.a.RequestMappingHandlerMapping : 2 mappings in 'requestMappingHandlerMapping'
+2019-09-20 08:34:53.210 DEBUG 57459 --- [main] o.s.w.s.handler.SimpleUrlHandlerMapping  : Patterns [/webjars/**, /**] in 'resourceHandlerMapping'
+2019-09-20 08:34:53.221 DEBUG 57459 --- [main] .m.m.a.ExceptionHandlerExceptionResolver : ControllerAdvice beans: 0 @ExceptionHandler, 1 ResponseBodyAdvice
+2019-09-20 08:34:53.493  INFO 57459 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 9088 (http) with context path ''
+2019-09-20 08:34:53.498  INFO 57459 --- [main] com.run.core.alipay.AlipayApplication    : Started AlipayApplication in 4.334 seconds (JVM running for 5.627)
+2019-09-20 08:34:53.592  INFO 57459 --- [nioEventLoopGroup-0-0] io.netty.handler.logging.LoggingHandler  : [id: 0xe2c28747] REGISTERED
+2019-09-20 08:34:53.593  INFO 57459 --- [nioEventLoopGroup-0-0] io.netty.handler.logging.LoggingHandler  : [id: 0xe2c28747] BIND: 0.0.0.0/0.0.0.0:10888
+2019-09-20 08:34:53.595  INFO 57459 --- [nioEventLoopGroup-0-0] io.netty.handler.logging.LoggingHandler  : [id: 0xe2c28747, /0:0:0:0:0:0:0:0:10888] ACTIVE
+2019-09-20 08:34:53.594  INFO 57459 --- [main] c.r.c.alipay.netty.NettyServerListener   : netty服务已经启动,端口：10888
+2019-09-20 08:34:57.881  INFO 57459 --- [Thread-11] o.s.s.concurrent.ThreadPoolTaskExecutor  : Shutting down ExecutorService 'applicationTaskExecutor'
+2019-09-20 08:34:57.882  INFO 57459 --- [Thread-11] c.r.c.alipay.netty.NettyServerListener   : 准备关闭netty服务器...
+2019-09-20 08:34:57.887  INFO 57459 --- [nioEventLoopGroup-0-0] io.netty.handler.logging.LoggingHandler  : [id: 0xe2c28747, /0:0:0:0:0:0:0:0:10888] UNREGISTERED
+2019-09-20 08:34:57.890  INFO 57459 --- [Thread-11] com.alibaba.druid.pool.DruidDataSource   : {dataSource-0} closing ...

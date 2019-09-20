@@ -150,14 +150,8 @@ public class AliPayService {
             }
 
         } catch (Exception e) {
-            if("查询的用户不存在".equals(e.getMessage())){
-                rtnCode = "1002";
-                rtnMsg = "查询号码不合法";
-            }else{
-                rtnCode = "1005";
-                rtnMsg = "暂时无法缴费";
-            }
-
+            rtnCode = "1002";
+            rtnMsg = "查询号码不合法";
             log.info("查询接口报错：[{}]",e.getMessage());
         }
 

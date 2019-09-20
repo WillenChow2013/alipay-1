@@ -16,6 +16,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
+import javax.annotation.PreDestroy;
 import javax.annotation.Resource;
 import javax.net.ssl.SSLEngine;
 import java.nio.charset.Charset;
@@ -50,6 +51,7 @@ public class NettyServerListener {
     @Resource
     private NettyServerHandler nettyServerHandler;
 
+    @PreDestroy
     public void close() {
         log.info("准备关闭netty服务器...");
         boss.shutdownGracefully();

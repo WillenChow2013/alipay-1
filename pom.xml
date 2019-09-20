@@ -145,6 +145,9 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
+                <configuration>
+                    <mainClass>com.run.core.alipay.AlipayApplication</mainClass>
+                </configuration>
             </plugin>
         </plugins>
     </build>
