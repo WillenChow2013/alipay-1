@@ -1,11 +1,6 @@
 package com.run.core.alipay.utils;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.util.Properties;
 import java.util.Vector;
 
@@ -85,6 +80,18 @@ public class SFTPTool {
 		} catch (Exception e) {
 			log.info("SFTP文件下载出错了！");
 			e.printStackTrace();
+		}
+	}
+
+	public void uploadFile(String filePath,String fileName,String targetSrc,ChannelSftp sftp){
+		String dst = filePath + "/" + fileName;
+		String src = targetSrc + "/" + fileName;
+		try {
+			sftp.put(dst,src);
+		} catch (SftpException e) {
+			log.info("---------------------------------------------------------------------");
+			log.info("文件上传失败" + e.getMessage());
+			log.info("---------------------------------------------------------------------");
 		}
 	}
 
