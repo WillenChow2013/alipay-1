@@ -1,7 +1,7 @@
 server:
   port: 9088
 netty:
-  port: 10888
+  port: 10889
   max-frame-len: 65535
   max-threads: 1024
 spring:

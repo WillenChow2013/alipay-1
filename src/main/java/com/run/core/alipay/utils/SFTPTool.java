@@ -73,13 +73,17 @@ public class SFTPTool {
 		try {
 			sftp.cd(directory);
 			File file = new File(saveFile + "/" + downloadFile);
+
+			File filePath = file.getParentFile();
+			if(!filePath.exists())
+				filePath.mkdirs();
+
 			FileOutputStream fileOutputStream = new FileOutputStream(file);
 			//下载SFTP服务器中downloadFile文件夹里面所有的文件到saveFile文件夹
 			sftp.get(downloadFile, fileOutputStream);
 			fileOutputStream.close();
 		} catch (Exception e) {
-			log.info("SFTP文件下载出错了！");
-			e.printStackTrace();
+			log.info("SFTP文件下载出错了:[{}]",e.getMessage());
 		}
 	}
 
